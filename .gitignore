@@ -2,7 +2,6 @@
 db.sqlite3
 Pipfile
 Pipfile.lock
-requirements.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
