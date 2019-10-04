@@ -25,7 +25,7 @@ SECRET_KEY = '(13y_oj$^(67egw4ff6px9$2(^gkg)ubn8!_izn&wwcp5^u758'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://django-help.herokuapp.com/']
 
 
 # Application definition
@@ -122,7 +122,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # For Heroku deployment
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For Heroku deployment
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
