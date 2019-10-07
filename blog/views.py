@@ -3,9 +3,18 @@ from django.views.generic import (ListView,
                                   DetailView,
                                   UpdateView,
                                   DeleteView,
-                                  CreateView)
+                                  CreateView,
+                                  TemplateView)
 from .models import Post, CustomUser
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+
+class AboutView(TemplateView):
+    template_name = "blog/about.html"
+
+
+class SearchView(TemplateView):
+    template_name = 'blog/search.html'
 
 
 class PostListView(ListView):

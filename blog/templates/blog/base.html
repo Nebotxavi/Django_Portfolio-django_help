@@ -31,8 +31,8 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                     <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link" href="#">Search</a>
-                        <a class="nav-item nav-link" href="#">About</a>
+                        <a class="nav-item nav-link" href="{% url 'search' %}">Search</a>
+                        <a class="nav-item nav-link" href="{% url 'about' %}">About</a>
                         <a class="nav-item nav-link" href="{% url 'post_create' %}">New Post</a>
                     </div>
                     <!-- Navbar Right Side -->
@@ -64,10 +64,18 @@
                     <h3>Resources</h3>
                     <p class='text-muted'>Most of my sources:
                         <ul class="list-group">
-                            <li class="list-group-item list-group-item-light"><a href="#">Under construction</a></li>
-                            <li class="list-group-item list-group-item-light">Under construction</li>
-                            <li class="list-group-item list-group-item-light">Under construction</li>
-                            <li class="list-group-item list-group-item-light">Under construction</li>
+                            <li class="list-group-item list-group-item-light"><a
+                                    href="https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g"
+                                    target="_blank">Corey Schafer</a>
+                            </li>
+                            <li class="list-group-item list-group-item-light"><a
+                                    href="https://www.youtube.com/channel/UCRM1gWNTDx0SHIqUJygD-kQ" target="_blank">Just
+                                    Django</a></li>
+                            <li class="list-group-item list-group-item-light"><a
+                                    href="https://simpleisbetterthancomplex.com/" target="_blank">
+                                    simpleisbetterthancomplex.com</a></li>
+                            <li class="list-group-item list-group-item-light"><a href="https://wsvincent.com/"
+                                    target="_blank">William Vincent</a></li>
                         </ul>
                     </p>
                 </div>
