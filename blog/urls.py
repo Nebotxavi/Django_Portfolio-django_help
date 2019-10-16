@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.PostListView.as_view(), name='home'),
     path('about/', views.AboutView.as_view(), name='about'),
     path('search/', views.SearchView.as_view(), name='search'),
+    path('results/', views.SearchResultsView.as_view(), name='results'),
     path('posts/<str:username>/',
          views.UserPostListView.as_view(), name='user_posts'),
     path('post/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),

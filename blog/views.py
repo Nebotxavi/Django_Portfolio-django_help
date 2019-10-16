@@ -1,12 +1,17 @@
-from django.shortcuts import render, get_object_or_404
 from django.views.generic import (ListView,
                                   DetailView,
                                   UpdateView,
                                   DeleteView,
                                   CreateView,
                                   TemplateView)
+
 from .models import Post, CustomUser
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+from django.shortcuts import render, get_object_or_404
+
+from django.db.models import Q
 
 
 class AboutView(TemplateView):
@@ -15,6 +20,33 @@ class AboutView(TemplateView):
 
 class SearchView(TemplateView):
     template_name = 'blog/search.html'
+
+
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/results.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        tags = self.request.GET.getlist('tags')
+
+        if query is "" and tags == []:
+            return Post.objects.all()
+
+        elif tags == []:
+            object_list = Post.objects.filter(
+                Q(title__icontains=query) | Q(content__icontains=query))
+            return object_list
+
+        elif query is "":
+            object_list = Post.objects.filter(tags__icontains=tags)
+            return object_list
+
+        else:
+            object_list = Post.objects.filter(
+                Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__icontains=tags))
+            return object_list
 
 
 class PostListView(ListView):
