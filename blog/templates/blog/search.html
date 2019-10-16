@@ -6,9 +6,85 @@
 <article class="media content-section">
     <div class="media-body">
 
-        <h3 class="article-title">Search</h3>
+        <h3 class="article-title border-bottom mb-4">Search</h3>
 
-        <p class="article-content">Under construction</p>
+        <form method="GET" action="{% url 'home' %}">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input class="form-control" aria-describedby="searchBar" name="query" type="text"
+                    placeholder="Search..." />
+            </div>
+
+            <div class="form-group">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="DeploymentBox" value="Deployment">
+                    <label class="form-check-label" for="DeploymentBox">Deployment</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="TestingBox" value="Testing">
+                    <label class="form-check-label" for="TestingBox">Testing</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="URLsBox" value="URLSs">
+                    <label class="form-check-label" for="URLsBox">URLs</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="ModelsBox" value="Models">
+                    <label class="form-check-label" for="ModelsBox">Models</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="DeploymentBox" value="Deployment">
+                    <label class="form-check-label" for="DeploymentBox">Deployment</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="TestingBox" value="Testing">
+                    <label class="form-check-label" for="TestingBox">Testing</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="URLsBox" value="URLSs">
+                    <label class="form-check-label" for="URLsBox">URLs</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="ModelsBox" value="Models">
+                    <label class="form-check-label" for="ModelsBox">Models</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="ViewsBox" value="Views">
+                    <label class="form-check-label" for="ViewsBox">Views</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="SetupBox" value="Setup">
+                    <label class="form-check-label" for="SetupBox">Setup</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="CRUDBox" value="CRUD">
+                    <label class="form-check-label" for="CRUDBox">CRUD</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="tags" type="checkbox" id="Custom_User_ModelBox"
+                        value="Custom User Model">
+                    <label class="form-check-label" for="Custom_User_ModelBox">Custom User Model</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <button class="btn btn-outline-info" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
 
     </div>
 </article>
