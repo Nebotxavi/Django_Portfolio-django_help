@@ -34,17 +34,20 @@ ALLOWED_HOSTS = ['django-help.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'blog.apps.BlogConfig',
-    'users.apps.UsersConfig',
+    'blog.apps.BlogConfig',  # new model
+    'users.apps.UsersConfig',  # new model
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # new
     'crispy_forms',
     'django_cleanup',
     'storages',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -157,5 +160,7 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+TAGGIT_CASE_INSENSITIVE = True
 
 django_heroku.settings(locals())

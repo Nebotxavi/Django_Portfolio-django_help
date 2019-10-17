@@ -18,34 +18,40 @@ class AboutView(TemplateView):
     template_name = "blog/about.html"
 
 
-class SearchView(TemplateView):
+class SearchView(ListView):
+    model = Post
+    context_object_name = 'tags'
     template_name = 'blog/search.html'
+
+    def get_queryset(self):
+        return Post.tags.all()
 
 
 class SearchResultsView(ListView):
     model = Post
     template_name = 'blog/results.html'
     context_object_name = 'posts'
+    # paginate_by = 5
 
     def get_queryset(self):
         query = self.request.GET.get('query')
         tags = self.request.GET.getlist('tags')
 
         if query is "" and tags == []:
-            return Post.objects.all()
+            return Post.objects.all().distinct()
 
         elif tags == []:
             object_list = Post.objects.filter(
-                Q(title__icontains=query) | Q(content__icontains=query))
+                Q(title__icontains=query) | Q(content__icontains=query)).distinct()
             return object_list
 
         elif query is "":
-            object_list = Post.objects.filter(tags__icontains=tags)
+            object_list = Post.objects.filter(tags__name__in=tags).distinct()
             return object_list
 
         else:
             object_list = Post.objects.filter(
-                Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__icontains=tags))
+                Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__in=tags)).distinct()
             return object_list
 
 
@@ -76,7 +82,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'tags']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -85,7 +91,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'tags']
 
     def form_valid(self, form):
         form.instance.author = self.request.user

@@ -2,6 +2,8 @@ from django.db import models
 from users.models import CustomUser
 from django.urls import reverse
 
+from taggit.managers import TaggableManager
+
 
 class Post(models.Model):
     title = models.CharField(max_length=150)
@@ -11,6 +13,8 @@ class Post(models.Model):
         CustomUser,
         on_delete=models.CASCADE
     )
+
+    tags = TaggableManager(blank=True)
 
     def __str__(self):
         return self.title
