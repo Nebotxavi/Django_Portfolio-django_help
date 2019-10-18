@@ -31,28 +31,30 @@ class SearchResultsView(ListView):
     model = Post
     template_name = 'blog/results.html'
     context_object_name = 'posts'
-    # paginate_by = 5
+    paginate_by = 5
 
     def get_queryset(self):
         query = self.request.GET.get('query')
         tags = self.request.GET.getlist('tags')
 
-        if query is "" and tags == []:
-            return Post.objects.all().distinct()
+        # Different options in case any of the search fields is left in blank
 
-        elif tags == []:
+        if query and tags:
+            object_list = Post.objects.filter(
+                Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__in=tags)).distinct()
+            return object_list
+
+        elif query:
             object_list = Post.objects.filter(
                 Q(title__icontains=query) | Q(content__icontains=query)).distinct()
             return object_list
 
-        elif query is "":
+        elif tags:
             object_list = Post.objects.filter(tags__name__in=tags).distinct()
             return object_list
 
         else:
-            object_list = Post.objects.filter(
-                Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__in=tags)).distinct()
-            return object_list
+            return Post.objects.all().distinct()
 
 
 class PostListView(ListView):
