@@ -1,6 +1,8 @@
 from django.test import TestCase, SimpleTestCase
 from django.urls import reverse
 
+from selenium import webdriver
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
@@ -246,25 +248,82 @@ class Tags(TestCase):
             password="testing_password"
         )
 
-        login = self.client.login(
-            username='testing_user',
-            password='testing_password'
-        )
-
         self.test_post = Post.objects.create(
             title="testing title",
             content="testing content",
-            tags="testing_tag",
             author=self.test_user
         )
 
+        self.test_post.tags.add("testing_tag", "second tag")
+
     def test_tags(self):
-        self.assertEqual(Post.tags.all().count(), 0)
-       # self.assertContain(Post.tags.get(name='testing_tag'), 'testing_tag')
-       # TAGS cannot introduced just by writing tags='text'
+        self.assertEqual(Post.tags.all().count(), 2)
+        self.assertEqual(Post.tags.get(name='testing_tag').name, 'testing_tag')
+        self.assertEqual(Post.tags.get(name='second tag').name, 'second tag')
 
 
-class Search(TestCase):
+class UserPostsList(TestCase):
+    def setUp(self):
+        self.test_user = get_user_model().objects.create_user(
+            username="testing_user_1",
+            email="testing1@mail.com",
+            password="testing_password1"
+        )
+
+        self.test_post = Post.objects.create(
+            title="testing title_1",
+            content="testing content_1",
+            author=self.test_user
+        )
+
+        self.test_user2 = get_user_model().objects.create_user(
+            username="testing_user_2",
+            email="testing2@mail.com",
+            password="testing_password2"
+        )
+
+        self.test_post2 = Post.objects.create(
+            title="testing title_2",
+            content="testing content_2",
+            author=self.test_user2
+        )
+
+    def test_user_posts_list(self):
+        resp = self.client.get('/posts/testing_user_1/')
+        self.assertContains(resp, 'testing title_1')
+        self.assertNotContains(resp, 'testing title_2')
+        self.assertContains(resp, 'testing_user_1')
+        self.assertNotContains(resp, 'testing_user_2')
+
+
+class Pagination(TestCase):
+    def setUp(self):
+
+        self.test_user = get_user_model().objects.create_user(
+            username="testing_user",
+            email="testing@mail.com",
+            password="testing_password"
+        )
+
+        for i in range(10, 0, -1):
+            self.test_post = Post.objects.create(
+                title="testing title_" + str(i),
+                content="testing content_" + str(i),
+                author=self.test_user
+            )
+
+    def test_pagination_status_code(self):
+        resp = self.client.get('/?page=2')
+        self.assertEqual(resp.status_code, 200)
+
+    def test_pagination_list(self):
+        resp = self.client.get('/?page=2')
+        self.assertContains(resp, 'testing title_10')
+        self.assertContains(resp, 'testing content_6')
+        self.assertNotContains(resp, 'testing title_2')
+
+
+class Profile(TestCase):
     def setUp(self):
         self.test_user = get_user_model().objects.create_user(
             username="testing_user",
@@ -277,8 +336,21 @@ class Search(TestCase):
             password='testing_password'
         )
 
-        self.test_post = Post.objects.create(
-            title="testing title",
-            content="testing content",
-            author=self.test_user
-        )
+    def test_profile_status_code(self):
+        resp = self.client.get('/profile/')
+        self.assertEqual(resp.status_code, 200)
+
+    def test_profile_name_status_code(self):
+        resp = self.client.get(reverse('profile'))
+        self.assertEqual(resp.status_code, 200)
+
+    def test_profile_change_items(self):
+        resp = self.client.post('/profile/', {
+            'username': 'updated_user',
+            'email': 'updated_mail@mail.com'
+        })
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, 'updated_user')
+        self.assertContains(resp, 'updated_mail@mail.com')
+        self.assertNotContains(resp, 'testing_user')
+        self.assertNotContains(resp, 'testing@mail.com')
