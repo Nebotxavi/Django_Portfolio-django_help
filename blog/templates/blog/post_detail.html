@@ -19,6 +19,19 @@
         </div>
         <h3><a class="article-title" href="#">{{ post.title }}</a></h3>
         <p class="article-content">{{ post.content|linebreaks }}</p>
+        <hr />
+        <div>
+            <small class="text-muted">
+                Tags:
+                {% for tag in post.tags.all %}
+                {% if forloop.last %}
+                <a href="{% url 'tag_posts' tag %}">{{ tag }}</a>
+                {% else %}
+                <a href="{% url 'tag_posts' tag %}">{{ tag }}</a>,
+                {% endif %}
+                {% endfor %}
+            </small>
+        </div>
     </div>
 </article>
 

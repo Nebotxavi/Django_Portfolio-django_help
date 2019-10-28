@@ -77,6 +77,17 @@ class UserPostListView(ListView):
         return Post.objects.filter(author=user).order_by('-date')
 
 
+class TagPostListView(ListView):
+    model = Post
+    template_name = 'blog/tag_post_list.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        tag = self.kwargs.get('tag')
+        return Post.objects.filter(tags__name__in=[tag]).order_by('-date')
+
+
 class PostDetailView(DetailView):
     model = Post
     context_object_name = 'post'

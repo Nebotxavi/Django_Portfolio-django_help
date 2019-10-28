@@ -14,7 +14,7 @@ class Post(models.Model):
         on_delete=models.CASCADE
     )
 
-    tags = TaggableManager(blank=True)
+    tags = TaggableManager(blank=True   )
 
     def __str__(self):
         return self.title
