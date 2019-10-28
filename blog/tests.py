@@ -256,10 +256,15 @@ class Tags(TestCase):
 
         self.test_post.tags.add("testing_tag", "second tag")
 
-    def test_tags(self):
+    def test_tags_in_DB(self):
         self.assertEqual(Post.tags.all().count(), 2)
         self.assertEqual(Post.tags.get(name='testing_tag').name, 'testing_tag')
         self.assertEqual(Post.tags.get(name='second tag').name, 'second tag')
+
+    def test_tags_in_post_detail(self):
+        resp = self.client.get('/post/1/')
+        self.assertContains(resp, 'testing_tag')
+        self.assertContains(resp, 'second tag')
 
 
 class UserPostsList(TestCase):
