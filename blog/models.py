@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import CustomUser
 from django.urls import reverse
+from django.utils.text import slugify
 
 from taggit.managers import TaggableManager
 
@@ -14,7 +15,9 @@ class Post(models.Model):
         on_delete=models.CASCADE
     )
 
-    tags = TaggableManager(blank=True   )
+    slug = models.SlugField(unique=True)
+
+    tags = TaggableManager(blank=True)
 
     def __str__(self):
         return self.title
@@ -26,4 +29,8 @@ class Post(models.Model):
             return self.content
 
     def get_absolute_url(self):
-        return reverse('post_detail', kwargs={'pk': self.pk})
+        return reverse('post_detail', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        self.slug = self.slug or slugify(self.title)
+        super().save(*args, **kwargs)

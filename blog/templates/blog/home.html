@@ -12,7 +12,7 @@
             <a class="mr-2" href="{% url 'user_posts' post.author %}">{{ post.author }}</a>
             <small class="text-muted">{{ post.date|date:'M d, Y H:i' }}</small>
         </div>
-        <h3><a class="article-title" href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
+        <h3><a class="article-title" href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></h3>
         <p class="article-content">{{ post.partial_content|linebreaks }}</p>
     </div>
 </article>

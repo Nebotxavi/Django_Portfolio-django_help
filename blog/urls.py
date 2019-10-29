@@ -9,8 +9,11 @@ urlpatterns = [
     path('posts/<str:username>/',
          views.UserPostListView.as_view(), name='user_posts'),
     path('posts/tags/<str:tag>/', views.TagPostListView.as_view(), name='tag_posts'),
-    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
     path('post/new_post/', views.PostCreateView.as_view(), name='post_create'),
-    path('post/<int:pk>/update/', views.PostUpdateView.as_view(), name='post_update'),
-    path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),
+    path('post/<slug:slug>/update/',
+         views.PostUpdateView.as_view(), name='post_update'),
+    path('post/<slug:slug>/delete/',
+         views.PostDeleteView.as_view(), name='post_delete'),
+    path('post/<slug:slug>/', views.PostDetailView.as_view(), name='post_detail'),
+
 ]
