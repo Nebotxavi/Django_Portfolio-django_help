@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from taggit.managers import TaggableManager
+import datetime
 
 
 class Post(models.Model):
@@ -32,5 +33,11 @@ class Post(models.Model):
         return reverse('post_detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = self.slug or slugify(self.title)
+        if Post.objects.filter(slug=slugify(self.title)).exists():
+            # Generates a unique based on the current date
+            date_num = datetime.datetime.now()
+            self.slug = slugify(self.title) + '-' + \
+                str(date_num.strftime("%y%m%d%H%M%S%f"))
+        else:
+            self.slug = slugify(self.title)
         super().save(*args, **kwargs)
