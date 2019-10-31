@@ -13,6 +13,8 @@ from django.shortcuts import render, get_object_or_404
 
 from django.db.models import Q
 
+from urllib.parse import quote_plus
+
 
 class AboutView(TemplateView):
     template_name = "blog/about.html"
@@ -92,6 +94,14 @@ class PostDetailView(DetailView):
     model = Post
     context_object_name = 'post'
     slug_url_kwarg = 'slug'
+
+    # Additional items with the URL-encoded content to pass it to the template.
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.get_object()
+        context['share_string_content'] = quote_plus(post.content)
+        context['share_string_title'] = quote_plus(post.title)
+        return context
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):

@@ -32,7 +32,19 @@
                 {% endfor %}
             </small>
         </div>
-    </div>
-</article>
+        <div>
+            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+                Facebook
+            </a>
+            <a target="_blank"
+                href="https://twitter.com/intent/tweet?text={{ share_string_content }}%20on%20%40django-help%20{{ request.build_absolute_uri }}">Twitter</a>
 
-{% endblock content %}
+            <a target="_blank"
+                href="http://www.reddit.com/submit?url={{ request.build_absolute_uri }}/&title={{ share_string_content }}.">Reddit</a>
+
+            <a target="_blank"
+                href="
+            http://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ share_string_title }}&summary={{ share_string_content }}&source=django-help">Linkedin</a>
+        </div>
+    </div>
+</article> {% endblock content %}
