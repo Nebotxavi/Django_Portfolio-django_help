@@ -150,18 +150,18 @@ class CRUD(TestCase):
 
     # Read
     def test_detail_content(self):
-        resp = self.client.get(reverse('post_detail', args='1'))
+        resp = self.client.get(reverse('post_detail', args=['testing-title']))
         self.assertContains(resp, 'testing title')
         self.assertContains(resp, 'testing content')
         self.assertContains(resp, 'testing_user')
         self.assertEqual(resp.status_code, 200)
 
     def test_detail_post_status_code(self):
-        resp = self.client.get('/post/1/')
+        resp = self.client.get('/post/testing-title/')
         self.assertEqual(resp.status_code, 200)
 
     def test_detail_post_template(self):
-        resp = self.client.get(reverse('post_detail', args='1'))
+        resp = self.client.get(reverse('post_detail', args=['testing-title']))
         self.assertTemplateUsed(resp, 'blog/post_detail.html')
 
     # Create
@@ -186,7 +186,8 @@ class CRUD(TestCase):
 
         self.assertEqual(resp.status_code, 302)
 
-        resp = self.client.get(reverse('post_detail', args='2'))
+        resp = self.client.get(
+            reverse('post_detail', args=['testing-title-2']))
         self.assertContains(resp, 'testing title 2')
         self.assertContains(resp, 'testing content 2')
         self.assertContains(resp, 'testing_user')
@@ -195,19 +196,19 @@ class CRUD(TestCase):
     # Update
 
     def test_update_post_status_code(self):
-        resp = self.client.get('/post/1/update/')
+        resp = self.client.get('/post/testing-title/update/')
         self.assertEqual(resp.status_code, 200)
 
     def test_update_post_name_status_code(self):
-        resp = self.client.get(reverse('post_update', args='1'))
+        resp = self.client.get(reverse('post_update', args=['testing-title']))
         self.assertEqual(resp.status_code, 200)
 
     def test_update_post_template(self):
-        resp = self.client.get('/post/1/update/')
+        resp = self.client.get('/post/testing-title/update/')
         self.assertTemplateUsed(resp, 'blog/post_form.html')
 
     def test_update_post_update(self):
-        resp = self.client.post('/post/1/update/', {
+        resp = self.client.post('/post/testing-title/update/', {
             'title': 'testing title updated',
             'content': 'testing content updated',
             'tags': 'new testing tag'
@@ -215,7 +216,8 @@ class CRUD(TestCase):
 
         self.assertEqual(resp.status_code, 302)
 
-        resp = self.client.get(reverse('post_detail', args='1'))
+        resp = self.client.get(
+            reverse('post_detail', args=['testing-title-updated']))
         self.assertContains(resp, 'testing title updated')
         self.assertContains(resp, 'testing content updated')
         self.assertContains(resp, 'testing_user')
@@ -224,19 +226,19 @@ class CRUD(TestCase):
     # Remove
 
     def test_delete_post_status_code(self):
-        resp = self.client.get('/post/1/delete/')
+        resp = self.client.get('/post/testing-title/delete/')
         self.assertEqual(resp.status_code, 200)
 
     def test_delete_post_name_status_code(self):
-        resp = self.client.get(reverse('post_delete', args='1'))
+        resp = self.client.get(reverse('post_delete', args=['testing-title']))
         self.assertEqual(resp.status_code, 200)
 
     def test_delete_post_template(self):
-        resp = self.client.get('/post/1/delete/')
+        resp = self.client.get('/post/testing-title/delete/')
         self.assertTemplateUsed(resp, 'blog/post_confirm_delete.html')
 
     def test_delete_post_delete(self):
-        resp = self.client.post('/post/1/delete/')
+        resp = self.client.post('/post/testing-title/delete/')
         self.assertEqual(Post.objects.all().count(), 0)
 
 
@@ -262,7 +264,7 @@ class Tags(TestCase):
         self.assertEqual(Post.tags.get(name='second tag').name, 'second tag')
 
     def test_tags_in_post_detail(self):
-        resp = self.client.get('/post/1/')
+        resp = self.client.get('/post/testing-title/')
         self.assertContains(resp, 'testing_tag')
         self.assertContains(resp, 'second tag')
 
