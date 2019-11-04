@@ -1,5 +1,6 @@
 {% extends 'blog/base.html' %}
 {% load static %}
+{% load urlify %}
 
 {% block title %}{{ post.title }}{% endblock title %}
 
@@ -36,19 +37,20 @@
         <div class="float-right">
             <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
                 <img src="{% static 'blog/img/facebookimg.png' %}" height="30px" width="30px"> </a>
+
             <a target=" _blank"
-                href="https://twitter.com/intent/tweet?text={{ share_string_content }}%20on%20%40django-help%20{{ request.build_absolute_uri }}">
+                href="https://twitter.com/intent/tweet?text={{ post.content|truncatechars:200|urlify }}%20on%20%40django-help%20{{ request.build_absolute_uri }}">
                 <img src="{% static 'blog/img/twitterimg.png' %}" height="30px" width="30px"> </a>
             </a>
 
             <a target="_blank"
-                href="http://www.reddit.com/submit?url={{ request.build_absolute_uri }}&title={{ share_string_title }}">
+                href="http://www.reddit.com/submit?url={{ request.build_absolute_uri }}&title={{ post.title|urlify }}">
                 <img src="{% static 'blog/img/redditimg.png' %}" height="30px" width="30px"> </a>
             </a>
 
             <a target="_blank"
                 href="
-            http://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ share_string_title }}&summary={{ share_string_content }}&source=django-help">
+            http://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ post.title|urlify }}&summary={{ post.content|truncatechars:150|urlify }}&source=django-help">
                 <img src="{% static 'blog/img/linkedinimg.png' %}" height="30px" width="30px"> </a>
             </a>
         </div>

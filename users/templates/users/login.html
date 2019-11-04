@@ -4,6 +4,12 @@
 {% block title %} Login {% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
+<div class='content-section'>
+    <h2 class="border-bottom mb-3">Login</h2>
+    <p>You are already logged as {{ user.username }}.</p>
+</div>
+{% else %}
 <div class="content-section">
     <form method="POST">
         {% csrf_token %}
@@ -21,5 +27,5 @@
         <small class="text-muted">Do you need an account?<a class="ml-2" href='{% url "signup" %}'>Signup</a></small>
     </div>
 </div>
-
+{% endif %}
 {% endblock %}

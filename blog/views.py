@@ -13,7 +13,7 @@ from django.shortcuts import render, get_object_or_404
 
 from django.db.models import Q
 
-from urllib.parse import quote_plus
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 class AboutView(TemplateView):
@@ -95,27 +95,29 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
     slug_url_kwarg = 'slug'
 
-    # Additional items with the URL-encoded content to pass it to the template.
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        post = self.get_object()
-        context['share_string_content'] = quote_plus(post.content)
-        context['share_string_title'] = quote_plus(post.title)
-        return context
+    # Additional items with the URL-encoded content to pass it to the template. COMMENTED OUT DUE TO THE SAME IS DONE BY CUSTOM FILTERS
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     post = self.get_object()
+    #     context['share_string_content'] = quote_plus(post.content)
+    #     context['share_string_title'] = quote_plus(post.title)
+    #     return context
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Post
     fields = ['title', 'content', 'tags']
+    success_message = "Post created successfully, please check it below."
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Post
     fields = ['title', 'content', 'tags']
+    success_message = 'Post updated successfully, please check it below.'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
