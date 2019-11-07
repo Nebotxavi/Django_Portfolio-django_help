@@ -82,3 +82,23 @@ body {
   .account-heading {
     font-size: 2.5rem;
   }
+
+  .wmd-panel {
+    width: 100%;
+    margin: 0;
+}
+
+  .wmd-button-bar {
+      background-color: #ffffff !important;
+  }
+
+  .wmd-preview{
+      width: 73%;
+      max-height: 400px;
+      overflow-y: auto;      
+      box-sizing: border-box;
+      padding: 1px 1px;
+      margin: 20px 0 0 170px;
+      border: 1px solid #eee;
+      border-radius: 4px;
+  }

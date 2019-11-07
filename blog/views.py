@@ -6,6 +6,7 @@ from django.views.generic import (ListView,
                                   TemplateView)
 
 from .models import Post, CustomUser
+from .forms import PostForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -105,8 +106,10 @@ class PostDetailView(DetailView):
 
 
 class PostCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    model = Post
-    fields = ['title', 'content', 'tags']
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+    # model = Post
+    # fields = ['title', 'content', 'tags']
     success_message = "Post created successfully, please check it below."
 
     def form_valid(self, form):

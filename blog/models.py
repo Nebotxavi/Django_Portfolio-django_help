@@ -24,7 +24,7 @@ class Post(models.Model):
         return self.title
 
     def partial_content(self):
-        if len(self.content) > 150:
+        if len(self.content) > 320:
             return self.content[:320] + '...'
         else:
             return self.content

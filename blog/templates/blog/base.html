@@ -18,6 +18,8 @@
         {% block title %}{% endblock %}
     </title>
 
+    {% block head_extra %}{% endblock head_extra %}
+
 </head>
 
 <body>
@@ -98,7 +100,6 @@
         $(document).ready(function () {
             let markedthing = $('.content-markdown')
             $('.content-markdown').each((index, item) => {
-                console.log(item, index)
                 let textContent = $(item).text()
                 const markedContent = marked(textContent)
                 $(item).html(markedContent)
