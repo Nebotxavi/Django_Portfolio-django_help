@@ -15,9 +15,7 @@ class Post(models.Model):
         CustomUser,
         on_delete=models.CASCADE
     )
-
     slug = models.SlugField(unique=True)
-
     tags = TaggableManager(blank=True)
 
     def __str__(self):

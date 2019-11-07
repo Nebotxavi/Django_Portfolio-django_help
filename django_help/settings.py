@@ -34,8 +34,9 @@ ALLOWED_HOSTS = ['django-help.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'blog.apps.BlogConfig',  # new model
-    'users.apps.UsersConfig',  # new model
+    'blog.apps.BlogConfig',             # new model
+    'users.apps.UsersConfig',           # new model
+    'comments.apps.CommentsConfig',     # new model
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
