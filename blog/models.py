@@ -6,6 +6,9 @@ from django.utils.text import slugify
 from taggit.managers import TaggableManager
 import datetime
 
+from django.contrib.contenttypes.fields import GenericRelation
+from comments.models import Comment
+
 
 class Post(models.Model):
     title = models.CharField(max_length=150)
@@ -17,6 +20,7 @@ class Post(models.Model):
     )
     slug = models.SlugField(unique=True)
     tags = TaggableManager(blank=True)
+    comments = GenericRelation(Comment)
 
     def __str__(self):
         return self.title

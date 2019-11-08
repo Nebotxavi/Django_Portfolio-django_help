@@ -102,3 +102,7 @@ body {
       border: 1px solid #eee;
       border-radius: 4px;
   }
+
+  .comment-content {
+    font-size: small;
+  }
