@@ -242,12 +242,49 @@ class CRUD(TestCase):
         self.assertEqual(Post.objects.all().count(), 0)
 
 
+class Comments(TestCase):
+    def setUp(self):
+        self.test_user = get_user_model().objects.create_user(
+            username="testing_user",
+            email="testing@mail.com",
+            password="testing_password"
+        )
+
+        self.login = self.client.login(
+            username='testing_user',
+            password='testing_password'
+        )
+
+        self.test_post = Post.objects.create(
+            title="testing title",
+            content="testing content",
+            author=self.test_user
+        )
+
+        self.test_comment = self.test_post.comments.create(
+            author=self.test_user,
+            content='testing comment 1')
+
+    def test_post_comment(self):
+        resp = self.client.post(
+            '/post/testing-title/', {'content': 'testing comment 2'})
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.get('/post/testing-title/')
+        self.assertContains(resp, 'testing comment 1')
+        self.assertContains(resp, 'testing comment 2')
+
+
 class Tags(TestCase):
     def setUp(self):
         self.test_user = get_user_model().objects.create_user(
             username="testing_user",
             email="testing@mail.com",
             password="testing_password"
+        )
+
+        self.login = self.client.login(
+            username='testing_user',
+            password='testing_password'
         )
 
         self.test_post = Post.objects.create(
@@ -265,6 +302,7 @@ class Tags(TestCase):
 
     def test_tags_in_post_detail(self):
         resp = self.client.get('/post/testing-title/')
+        self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, 'testing_tag')
         self.assertContains(resp, 'second tag')
 

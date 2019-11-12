@@ -8,6 +8,7 @@ from django.views.generic import (ListView,
 from .models import Post, CustomUser
 from .forms import PostForm
 from comments.models import Comment
+from comments.forms import CommentForm
 
 from django.contrib.contenttypes.models import ContentType
 
@@ -18,6 +19,9 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 
 from django.contrib.messages.views import SuccessMessageMixin
+
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 class AboutView(TemplateView):
@@ -94,16 +98,43 @@ class TagPostListView(ListView):
         return Post.objects.filter(tags__name__in=[tag]).order_by('-date')
 
 
-class PostDetailView(DetailView):
-    model = Post
-    context_object_name = 'post'
-    slug_url_kwarg = 'slug'
+# class PostDetailView(DetailView):
+#     model = Post
+#     context_object_name = 'post'
+#     slug_url_kwarg = 'slug'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        post = self.get_object()
-        context['comments'] = post.comments.all()
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         post = self.get_object()
+#         context['comments'] = post.comments.all()
+#         return context
+
+def PostDetailView(request, slug):
+    template_name = 'blog/post_detail.html'
+    post = get_object_or_404(Post, slug=slug)
+    user = get_object_or_404(CustomUser, username=request.user)
+    comments = post.comments.all()
+
+    new_comment = None
+
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            post.comments.create(author=user,
+                                 content=new_comment)
+
+            return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
+
+    else:
+        comment_form = CommentForm()
+
+    context = {"post": post,
+               "comments": comments,
+               "new_comment": new_comment,
+               "comment_form": comment_form}
+
+    return render(request, template_name, context)
 
 
 class PostCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
