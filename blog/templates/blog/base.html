@@ -105,6 +105,15 @@
                 $(item).html(markedContent)
             })
         })
+
     </script>
+    <script>
+
+        $('.comment-reply-btn').click(function (event) {
+            event.preventDefault();
+            $(this).closest('div').siblings('div').fadeToggle();
+        });
+    </script>
+
 
 </html>

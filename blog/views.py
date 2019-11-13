@@ -10,6 +10,8 @@ from .forms import PostForm
 from comments.models import Comment
 from comments.forms import CommentForm
 
+from .utils import lecture_time
+
 from django.contrib.contenttypes.models import ContentType
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -113,16 +115,29 @@ def PostDetailView(request, slug):
     template_name = 'blog/post_detail.html'
     post = get_object_or_404(Post, slug=slug)
     user = get_object_or_404(CustomUser, username=request.user)
-    comments = post.comments.all()
+    comments = post.comments.filter(parent=None)
 
+    word_count = lecture_time(post.content)
     new_comment = None
+    parent_obj = None
 
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
+            try:
+                parent_id = int(request.POST.get("parent_id"))
+            except:
+                parent_id = None
+
+            if parent_id:
+                parent_qs = Comment.objects.filter(id=parent_id)
+                if parent_qs.exists():
+                    parent_obj = parent_qs.first()
+
             post.comments.create(author=user,
-                                 content=new_comment)
+                                 content=new_comment,
+                                 parent=parent_obj)
 
             return HttpResponseRedirect(reverse('post_detail', args=[post.slug]))
 
@@ -132,7 +147,8 @@ def PostDetailView(request, slug):
     context = {"post": post,
                "comments": comments,
                "new_comment": new_comment,
-               "comment_form": comment_form}
+               "comment_form": comment_form,
+               "word_count": word_count}
 
     return render(request, template_name, context)
 

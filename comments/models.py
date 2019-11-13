@@ -18,6 +18,8 @@ class Comment(models.Model):
 
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['-date']
@@ -27,3 +29,12 @@ class Comment(models.Model):
             return str(self.content[:30] + "...")
         else:
             return str(self.content)
+
+    def children(self):
+        return Comment.objects.filter(parent=self)
+
+    @property
+    def is_parent(self):
+        if self.parent is not None:
+            return False
+        return True

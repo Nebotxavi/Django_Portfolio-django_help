@@ -106,3 +106,11 @@ body {
   .comment-content {
     font-size: small;
   }
+
+  .reply-link {
+    color: black;
+  }
+
+  .comment-reply {
+    display: none;
+  }
