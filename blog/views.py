@@ -114,7 +114,6 @@ class TagPostListView(ListView):
 def PostDetailView(request, slug):
     template_name = 'blog/post_detail.html'
     post = get_object_or_404(Post, slug=slug)
-    user = get_object_or_404(CustomUser, username=request.user)
     comments = post.comments.filter(parent=None)
 
     word_count = lecture_time(post.content)
@@ -122,6 +121,7 @@ def PostDetailView(request, slug):
     parent_obj = None
 
     if request.method == 'POST':
+        user = CustomUser.objects.get(username=request.user)
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)

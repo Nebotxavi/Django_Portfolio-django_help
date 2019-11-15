@@ -111,8 +111,13 @@
 
         $('.comment-reply-btn').click(function (event) {
             event.preventDefault();
-            $(this).closest('div').siblings('div').fadeToggle();
+            $(this).closest('div').siblings('div').children('.comment-reply').fadeToggle();
         });
+
+        $('.comment-replies-btn').click(function (event) {
+            event.preventDefault();
+            $(this).closest('div').siblings('div').children('.comment-replies').fadeToggle();
+        })
     </script>
 
 

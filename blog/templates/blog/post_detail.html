@@ -66,11 +66,15 @@
 <div class="media content-section">
     <div class="media-body">
         <h5>Comments</h5>
+        {% if user.is_authenticated %}
         <form method="post">
             {% csrf_token %}
-            {{ comment_form.as_p }}
+            {{ comment_form|crispy }}
             <button type="submit" class="btn btn-secondary btn-sm mb-4 float-right">Comment</button>
         </form>
+        {% else %}
+        <p><a href="{% url 'signup' %}">Join us</a> to post comments.</p>
+        {% endif %}
         <ul class="list-unstyled mt-5">
             {% for comment in comments %}
             <li class="media my-4">
@@ -78,16 +82,18 @@
                 <div class="media-body">
                     <div class="article-metadata">
                         <a class="mr-2" href="{% url 'user_posts' comment.author %}">{{ comment.author }}</a>
-                        <small class="text-muted">{{ comment.date|date:'M d, Y H:i' }} ||
-                            {% if comment.children.count > 0 %}{{ comment.children.count }}
-                            comment{% if comment.children.count > 1 %}s || {% endif %}{% endif %} <a
-                                class="comment-reply-btn" href="#">Reply</a></small>
+                        <small class="text-muted">
+                            {{ comment.date|date:'M d, Y H:i' }} ||
+                            {% if comment.children.count > 0 %}<a class="comment-replies-btn" href='#'>View
+                                {{ comment.children.count }}
+                                comment{% if comment.children.count > 1 %}s{% endif %}</a> ||{% endif %}
+                            <a class="comment-reply-btn" href="#">Reply</a></small>
                     </div>
                     <p class="comment-content">{{comment.content}}</p>
 
-                    <div class='comment-reply'>
+                    <div>
                         {% for reply in comment.children %}
-                        <div class="ml-4">
+                        <div class="ml-4 comment-replies">
                             <div class="article-metadata">
                                 <small><a class="mr-2 reply-link"
                                         href="{% url 'user_posts' comment.author %}">{{ reply.author }}</a></small>
@@ -96,12 +102,20 @@
                             <p class="comment-content">{{reply.content}}</p>
                         </div>
                         {% endfor %}
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ comment_form.as_p }}
-                            <input type='hidden' name='parent_id' value="{{ comment.id }}">
-                            <button type="submit" class="btn btn-secondary btn-sm mb-4 float-right">Comment</button>
-                        </form>
+                        {% if user.is_authenticated %}
+                        <div class='comment-reply'>
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ comment_form.as_p }}
+                                <input type='hidden' name='parent_id' value="{{ comment.id }}">
+                                <button type="submit" class="btn btn-secondary btn-sm mb-4 float-right">Comment</button>
+                            </form>
+                        </div>
+                        {% else %}
+                        <div class='comment-reply'>
+                            <p><a href="{% url 'signup' %}">Join us</a> to post comments.</p>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </li>

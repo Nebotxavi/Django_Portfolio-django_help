@@ -265,6 +265,12 @@ class Comments(TestCase):
             author=self.test_user,
             content='testing comment 1')
 
+        self.test_reply = self.test_post.comments.create(
+            author=self.test_user,
+            content='testing reply to comment 1',
+            parent=self.test_comment
+        )
+
     def test_post_comment(self):
         resp = self.client.post(
             '/post/testing-title/', {'content': 'testing comment 2'})
@@ -272,6 +278,16 @@ class Comments(TestCase):
         resp = self.client.get('/post/testing-title/')
         self.assertContains(resp, 'testing comment 1')
         self.assertContains(resp, 'testing comment 2')
+        self.assertNotContains(resp, 'testing comment 3')
+
+    def test_comment_reply(self):
+        resp = self.client.post('/post/testing-title/',
+                                {'content': 'testing reply to comment 2'})
+        self.assertEqual(resp.status_code, 302)
+        resp = self.client.get('/post/testing-title/')
+        self.assertContains(resp, 'testing reply to comment 1')
+        self.assertContains(resp, 'testing reply to comment 2')
+        self.assertNotContains(resp, 'testing reply to comment 3')
 
 
 class Tags(TestCase):

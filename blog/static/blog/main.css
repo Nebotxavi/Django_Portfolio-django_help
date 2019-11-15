@@ -114,3 +114,7 @@ body {
   .comment-reply {
     display: none;
   }
+
+  .comment-replies {
+    display: none;
+  }

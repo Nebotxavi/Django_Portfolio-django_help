@@ -33,8 +33,8 @@ class Comment(models.Model):
     def children(self):
         return Comment.objects.filter(parent=self)
 
-    @property
-    def is_parent(self):
-        if self.parent is not None:
-            return False
-        return True
+    # @property
+    # def is_parent(self):
+    #     if self.parent is not None:
+    #         return False
+    #     return True

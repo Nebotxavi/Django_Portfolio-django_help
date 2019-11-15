@@ -36,7 +36,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if Post.objects.filter(slug=slugify(self.title)).exists():
-            # Generates a unique based on the current date
+            # Generates a unique slug based on the current date
             date_num = datetime.datetime.now()
             self.slug = slugify(self.title) + '-' + \
                 str(date_num.strftime("%y%m%d%H%M%S%f"))
