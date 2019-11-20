@@ -164,6 +164,11 @@ class CRUD(TestCase):
         resp = self.client.get(reverse('post_detail', args=['testing-title']))
         self.assertTemplateUsed(resp, 'blog/post_detail.html')
 
+    def test_read_without_login(self):
+        self.client.get('/logout/')
+        resp = self.client.get('/post/testing-title/')
+        self.assertEqual(resp.status_code, 200)
+
     # Create
 
     def test_new_post_status_code(self):
@@ -192,6 +197,11 @@ class CRUD(TestCase):
         self.assertContains(resp, 'testing content 2')
         self.assertContains(resp, 'testing_user')
         self.assertNotContains(resp, 'testing title 1')
+
+    def test_create_without_login(self):
+        self.client.get('/logout/')
+        resp = self.client.get('/post/new_post/')
+        self.assertNotEqual(resp.status_code, 200)
 
     # Update
 
@@ -415,3 +425,28 @@ class Profile(TestCase):
         self.assertContains(resp, 'updated_mail@mail.com')
         self.assertNotContains(resp, 'testing_user')
         self.assertNotContains(resp, 'testing@mail.com')
+
+
+class ReadTime(TestCase):
+
+    def setUp(self):
+        self.test_user = get_user_model().objects.create_user(
+            username="testing_user",
+            email="testing@mail.com",
+            password="testing_password"
+        )
+
+        # login = self.client.login(
+        #     username='testing_user',
+        #     password='testing_password'
+        # )
+
+        self.test_post = Post.objects.create(
+            title="testing title",
+            content="testing content",
+            author=self.test_user
+        )
+
+    def test_read_time(self):
+        resp = self.client.get('/post/testing-title/')
+        self.assertContains(resp, "< 2 min read")
