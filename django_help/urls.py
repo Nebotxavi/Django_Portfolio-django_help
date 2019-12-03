@@ -29,6 +29,7 @@ urlpatterns = [
         template_name='users/password_change_done.html'), name='password_change_done'),
     path('', include('blog.urls')),
     path('api/posts/', include('blog.API.urls')),
+    path('api/users/', include('users.API.urls')),
 ]
 
 if settings.DEBUG:
