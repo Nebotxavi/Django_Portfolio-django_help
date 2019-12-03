@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
     path('signup/', users_views.Signup.as_view(), name='signup'),
     path('profile/', users_views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(
@@ -27,6 +28,8 @@ urlpatterns = [
     path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='users/password_change_done.html'), name='password_change_done'),
     path('', include('blog.urls')),
+    path('api/posts/', include('blog.API.urls')),
+    path('api/users/', include('users.API.urls')),
 ]
 
 if settings.DEBUG:
